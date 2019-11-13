@@ -66,6 +66,7 @@ while (1){
     ipFactory->printInput(c);
     delete ipFactory;
 } 
+std::cout << "teste";
 term::disableRawMode(&old_termios_settings);  
 return 0;
 }
