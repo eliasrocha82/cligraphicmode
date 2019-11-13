@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build C++ Project",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "bash",
+            "args": [
+                "-c",
+                "make all"
+            ]
+        },  
+        {
+            "label": "Build & run C++ Project",
+            "type": "shell",
+           
+            "command": "bash",
+            "args": [
+                "-c",
+                "make run"
+            ]
+        },
+        {
+            "label": "Build nasm",
+            "type": "shell",
+           
+            "command": "bash",
+            "args": [
+                "-c",
+                "make asm"
+            ]
+        }
+    ]
+}
