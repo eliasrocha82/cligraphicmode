@@ -3,25 +3,32 @@
 class inputsInterfce
 {
     public:
-    virtual void print(char c)=0;
+    virtual int print(char c)=0;
     virtual ~inputsInterfce(){};
 };
 class controles:public inputsInterfce
 {   public:
-    void print(char c){printf("%d\r\n",c);}
+    int print(char c)
+    {
+        printf("%d\r\n",c);
+        return c;
+    }
 };
 
 class chars:public inputsInterfce{
     public:
-    void print(char c){
+    int print(char c)
+    {
       printf("%d ('%c')\r\n",c,c);
+      return c;
     }
 };
 
 class exits:public inputsInterfce{
     public:
-    void print(char c){
-      printf("%d:exiting by the user...",c);
+    int print(char c){
+      printf("%d:exiting by the user...\n",c);
+      return 0;
     }
 };
 class inputsFactory
@@ -49,21 +56,21 @@ class inputsFactory
         virtual ~inputsFactory(){
            delete input;
         }
-        void printInput(char c){
-            input->print(c);
+        int printInput(char c){
+           return input->print(c);
         }
         
 };
 int main()
-{
+{int quit=1;
 struct termios old_termios_settings;
 term::enableRawMode(&old_termios_settings);
 inputsFactory * ipFactory;  
-while (1){
+while (quit){
     char c = '\0';
     read(STDIN_FILENO, &c, 1);
     ipFactory = new inputsFactory(c);
-    ipFactory->printInput(c);
+    quit=ipFactory->printInput(c);
     delete ipFactory;
 } 
 term::disableRawMode(&old_termios_settings);  
