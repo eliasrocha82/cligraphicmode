@@ -1,78 +1,49 @@
 #include <iostream>
+#include <errno.h>
 #include "rawmode.h"
-class inputsInterfce
-{
-    public:
-    virtual int print(char c)=0;
-    virtual ~inputsInterfce(){};
-};
-class controles:public inputsInterfce
-{   public:
-    int print(char c)
-    {
-        printf("%d\r\n",c);
-        return c;
-    }
-};
+#include "defs.h"
+#include "erros.h"
+#include "outputs.h"
+#include "inputs.h"
+#include "terminal.h"
 
-class chars:public inputsInterfce{
-    public:
-    int print(char c)
-    {
-      printf("%d ('%c')\r\n",c,c);
-      return c;
-    }
-};
+int main()
+{/*
+    int quit=1;
+    struct editorConfig {
+        struct termios old_termios;
+    };
+    struct editorConfig E;
 
-class exits:public inputsInterfce{
-    public:
-    int print(char c){
-      printf("%d:exiting by the user...\n",c);
-      return 0;
-    }
-};
-class inputsFactory
-{
-    private:
-        inputsInterfce * input=0;
-    public:
-        inputsFactory(char c)
-        {   
-            if(iscntrl(c))
-            {
-                input = new controles();
-                
-            }else
-            { 
-                input=new chars();
-                
-            }
-            if(c=='q')
-            {
-                input=new exits();
-            }
+    term::enableRawMode(&E.old_termios);
 
-        }
-        virtual ~inputsFactory(){
-           delete input;
-        }
-        int printInput(char c){
-           return input->print(c);
+    while (quit){
+        outputs::editorRefreshScreen();
+        quit=processKeys();
+    } 
+    term::disableRawMode(&E.old_termios); 
+   */
+    int quit=1;
+    terminal::terminalClass * term = new terminal::terminalClass();
+    try{
+    (*term).init();
+    }catch(const char * msg){
+        std::cerr << msg << std::endl;
+    }
+    while(quit){
+        try{
+        (*term).refresh();
+        quit=(*term).processInput();
+        }catch(const char * msg){
+            std::cerr << msg << std::endl;
         }
         
-};
-int main()
-{int quit=1;
-struct termios old_termios_settings;
-term::enableRawMode(&old_termios_settings);
-inputsFactory * ipFactory;  
-while (quit){
-    char c = '\0';
-    read(STDIN_FILENO, &c, 1);
-    ipFactory = new inputsFactory(c);
-    quit=ipFactory->printInput(c);
-    delete ipFactory;
-} 
-term::disableRawMode(&old_termios_settings);  
-return 0;
+    }
+    try
+    {
+        (*term).exit();
+    }catch(const char * msg){
+        std::cerr << msg << std::endl;
+    }
+    return 0;
 }
