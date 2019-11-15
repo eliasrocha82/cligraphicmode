@@ -43,7 +43,6 @@ int terminalClass::processInput()
     delete ipFactory;
     return quit;
 }
-
 int terminalClass::drawRows()
 {
     int y;

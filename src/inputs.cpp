@@ -15,7 +15,6 @@ int charsInputClass::print(char c)
     // printf("%d ('%c')\r\n",c,c);
     return c;
 }
-
 int exitsInputClass::print(char c)
 {
     std::cout << c << ":exiting by the user...\r\n";
@@ -39,15 +38,12 @@ inputsFactory::inputsFactory(char c)
         }
 inputsFactory::~inputsFactory()
 {
-           delete input;
+    delete input;
 }
 int inputsFactory::printInput(char c)
 {
     return input->print(c);
 }
-        
-
-
 #ifdef __cplusplus
 }}
 #endif

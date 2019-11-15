@@ -12,10 +12,6 @@ extern "C"
 #endif
     int editorDrawRows();
     int editorRefreshScreen(); 
-    
-
-
-
 #ifdef __cplusplus
     }
 }
